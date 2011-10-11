@@ -30,7 +30,7 @@ public class ProblemCauseTest extends UnitTest {
 		rcaCase.save();
 		ProblemDefinition probDef = new ProblemDefinition("Out of coffee", rcaCase);
 		probDef.save();
-		ProblemCause probCause = new ProblemCause("Out of coffee grounds");
+		ProblemCause probCause = new ProblemCause("Out of coffee grounds", probDef);
 		probCause.save();
 		probDef.addCause(probCause);
 		ProblemCause probCause2 = new ProblemCause("Out of money");

@@ -13,6 +13,7 @@ import java.util.Set;
  * Date: 6.10.2011
  * Time: 20:24
  * To change this template use File | Settings | File Templates.
+ * QUESTION: could ProblemDefinition name be changed to Problem
  */
 
 @Entity
