@@ -107,7 +107,8 @@
       var lastReceived = ${lastMessage};
       var waitMessages = #{jsAction @waitMessages(rcaCase.id,':lastReceived') /}
       var addCause = #{jsAction @CauseController.addCause(':causeId', ':name') /}
-      var deleteCause = #{jsAction @CauseController.deleteCause(':causeId') /}
+      var currentUser= ${current};
+      var deleteCause = #{jsAction @CauseController.deleteCause(':causeId', ':currentUser') /}
       var addRelation = #{jsAction @CauseController.addRelation(':fromId', ':toID') /}
       // end
       var $radial_menu = $("#radial_menu"), menupos, menuwidth, selectedNode, relationFromNode;
@@ -121,7 +122,7 @@
         selectEvent: "click", // the select event (click)
         onSelect: function($selected){ // show what is returned 
             if($selected[0].id == "radmenu-event-removeCause"){
-              $.post(deleteCause({causeId: selectedNode.id}));
+              $.post(deleteCause({causeId: selectedNode.id, currentUser: currentUser}));
               jQuery("#radial_menu").radmenu("hide");
               selectedNode.setData('alpha', 0, 'end');
               fd.fx.animate({  
