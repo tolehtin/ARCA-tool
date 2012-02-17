@@ -102,7 +102,18 @@
              title='&{'editor.renameCause'}'>
               <img src="@{'/public/images/icons/edit.png'}" height="36" width="36" style="margin-left: -8px; margin-top: -8px">
           </a>
-    </li>
+      </li>
+      <li class="item radmenu-button" id="radmenu-event-likeCause">
+          <a href="#" rel='twipsy' data-placement="right" title='&{'editor.likeCause'}'>
+              <img src="@{'/public/images/icons/thumb_up.png'}" height="36" width="36" style="margin-left: -8px; margin-top: -8px">
+          </a>
+      </li>
+      <li class="item radmenu-button" id="radmenu-event-dislikeCause">
+          <a href="#" rel='twipsy' data-placement="right" title='&{'editor.dislikeCause'}'>
+              <img src="@{'/public/images/icons/thumb_down.png'}" height="36" width="36" style="margin-left: -8px;
+              margin-top: -8px">
+          </a>
+      </li>
     </ul>
   </div>
   <!-- Add corrective action popover form div -->
@@ -240,9 +251,19 @@
         $("#renameCause-modal").modal('hide');
         $.post(renameCauseAjax({causeId: globalSelectedNode, name: encodeURIComponent(name)}));
     };
-</script>
 
-<script type="text/javascript">
+    function likeCause() {
+        var likeCauseAjax = #{jsAction @CauseController.like(':causeId') /};
+        radmenu_fadeOut();
+        $.post(likeCauseAjax({causeId: globalSelectedNode}));
+    };
+
+    function dislikeCause() {
+        var dislikeCauseAjax = #{jsAction @CauseController.dislike(':causeId') /};
+        radmenu_fadeOut();
+        $.post(dislikeCauseAjax({causeId: globalSelectedNode}));
+    };
+
   function addCorrectiveIdea() {
     var addCorrection = #{jsAction @CauseController.addCorrection(':toId', ':name', ':description') /}
     var name = $("#ideaName").val();
@@ -458,6 +479,14 @@
               });
               $('#addcorrection-modal').modal('show');
               globalSelectedNode = selectedNode.id;
+            }
+            else if($selected[0].id == "radmenu-event-likeCause"){
+                globalSelectedNode = selectedNode.id;
+                likeCause();
+            }
+            else if($selected[0].id == "radmenu-event-dislikeCause"){
+                globalSelectedNode = selectedNode.id;
+                dislikeCause();
             }
           },
         angleOffset: 45 // in degrees
@@ -717,6 +746,11 @@
                             var oldNode = fd.graph.getNode(this.data.causeId);
                             oldNode.name = this.data.newName;
                             $("#" + this.data.causeId).html(this.data.newName);
+                        }
+                        else if(this.data.type === 'amountOfLikesEvent') {
+                            var currentNode = fd.graph.getNode(this.data.causeId);
+                            var amountOfLikes = this.data.amountOfLikes;
+                            $("#" + currentNode.causeId).html(amountOfLikes);
                         }
                         else if(this.data.type === 'nodemovedevent'){
                           var nodeToMove = fd.graph.getNode(this.data.causeId);
